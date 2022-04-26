@@ -1,4 +1,5 @@
 ﻿using Expenses.Core;
+using Expenses.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,10 +24,32 @@ namespace Expenses.WebApi.Controllers
         {
             return Ok(_expensesServices.GetExpenses());
         }
-        
 
-       
+        [HttpGet("{id}", Name ="GetExpense")]
+        public IActionResult GetExpense(int id)
+        {
+            return Ok(_expensesServices.GetExpense(id));
+        }
 
-       
+        [HttpPost]
+        public IActionResult CreateExpense(Expense expense)
+        {
+            var newExpense = _expensesServices.CreateExpense(expense);
+            return CreatedAtRoute("GetExpense", new { newExpense.Id }, newExpense);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteExpense(Expense expense)
+        {
+            _expensesServices.DeleteExpense(expense);
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult EditExpense(Expense expense)
+        {
+            return Ok(_expensesServices.EditExpense(expense));
+        }
+
     }
 }
